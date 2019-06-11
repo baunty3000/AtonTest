@@ -1,7 +1,6 @@
 package com.malakhov.atontest.model;
 
 import org.json.JSONObject;
-
 import java.util.Objects;
 
 public class VKUser {
@@ -25,14 +24,6 @@ public class VKUser {
 
     public void setFirstName(String firstName) {
         mFirstName = firstName;
-    }
-
-    public String getPhotoMini() {
-        return mPhotoMini;
-    }
-
-    public void setPhotoMini(String photoMini) {
-        mPhotoMini = photoMini;
     }
 
     public String getPhotoOrig() {

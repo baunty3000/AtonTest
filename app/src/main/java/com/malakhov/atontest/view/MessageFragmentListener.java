@@ -1,5 +1,5 @@
 package com.malakhov.atontest.view;
 
 public interface MessageFragmentListener {
-    void onItemClicked(String fragmentTag);
+    void onViewClicked(String fragmentTag);
 }

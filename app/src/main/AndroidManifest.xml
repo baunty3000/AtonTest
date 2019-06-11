@@ -12,6 +12,7 @@
             android:supportsRtl="true"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar"
             android:name=".App">
+
         <activity android:name=".view.WelcomeActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
@@ -22,6 +23,8 @@
         <activity android:name="com.vk.sdk.VKServiceActivity"
                   android:label="ServiceActivity"
                   android:theme="@style/VK.Transparent" />
+
+
     </application>
 
 </manifest>

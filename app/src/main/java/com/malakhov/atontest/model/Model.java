@@ -5,20 +5,24 @@ import com.vk.sdk.api.VKError;
 import com.vk.sdk.api.VKParameters;
 import com.vk.sdk.api.VKRequest;
 import com.vk.sdk.api.VKResponse;
-
 import org.json.JSONArray;
 import org.json.JSONException;
-
 import android.util.Log;
 import java.util.ArrayList;
-
+import static com.malakhov.atontest.view.WelcomeActivity.TAG;
 import static com.vk.sdk.api.VKApiConst.FIELDS;
 
 public class Model {
 
-    private String TAG = "info";
+    private static final Model ourInstance = new Model();
+    private LoadFriendsCallback mLoadFriendsCallback;
 
-    public LoadFriendsCallback mLoadFriendsCallback;
+    public static Model getInstance() {
+        return ourInstance;
+    }
+
+    private Model() {
+    }
 
     public void setLoadFriendsCallback(LoadFriendsCallback loadFriendsCallback) {
         mLoadFriendsCallback = loadFriendsCallback;
@@ -32,7 +36,7 @@ public class Model {
         request.executeWithListener(new VKRequest.VKRequestListener() {
             @Override
             public void onComplete(VKResponse response) {
-                Log.d(TAG, "onComplete: ");
+                Log.d(TAG, "Model loading friends onComplete");
                 mLoadFriendsCallback.onLoad(getListFriends(getJSONArrayFriends(response)));
             }
 
@@ -70,6 +74,4 @@ public class Model {
         }
         return listFriends;
     }
-
-
 }

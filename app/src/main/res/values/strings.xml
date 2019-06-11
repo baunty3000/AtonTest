@@ -4,4 +4,5 @@
     <string name="logout">Logout</string>
     <string name="fio">fio</string>
     <string name="error_login_vk">Программа не может работать без авторизации в Вк</string>
+    <string name="error_no_id">id не обработан</string> <!--hi-->
 </resources>

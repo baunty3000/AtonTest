@@ -1,51 +1,63 @@
 package com.malakhov.atontest.common;
 
 import com.malakhov.atontest.R;
-import com.malakhov.atontest.model.DownloadImageTask;
 import com.malakhov.atontest.model.VKUser;
-
-import android.content.Context;
+import android.graphics.Bitmap;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.VHFriends> {
 
     private List<VKUser> mFriendList = new ArrayList<>();
-    private final LayoutInflater mInflater;
+    private ClickFriendCallBack mClickFriendCallBack;
 
-    public FriendsAdapter(Context context) {
-        mInflater = LayoutInflater.from(context);
+    public FriendsAdapter(ClickFriendCallBack clickFriendCallBack) {
+        mClickFriendCallBack = clickFriendCallBack;
     }
 
     public void setNewsItems(List<VKUser> list) {
         mFriendList.clear();
         mFriendList.addAll(list);
         notifyDataSetChanged();
+        DownloaderImages.getInstance().init();
     }
 
     @NonNull
     @Override
     public VHFriends onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new VHFriends(mInflater.inflate(R.layout.item_recycler, parent, false), mFriendList);
+        return new VHFriends(LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.item_recycler, parent, false));
     }
 
     @Override
     public void onBindViewHolder(@NonNull VHFriends holder, int position) {
-        holder.bind(mFriendList.get(position));
+        VKUser vkUser = mFriendList.get(position);
+        holder.bind(vkUser);
+        holder.itemView.setOnClickListener(v -> {
+            if (mClickFriendCallBack != null) mClickFriendCallBack.clickOnFriend(vkUser);
+        });
+        if (DownloaderImages.getInstance().getPhoto(vkUser.getPhotoOrig()) != null){
+            holder.setPhoto(DownloaderImages.getInstance().getPhoto(vkUser.getPhotoOrig()));
+            holder.mProgressBar.setVisibility(View.GONE);
+        } else { DownloaderImages.getInstance().downloadPhoto(mFriendList.get(position).getPhotoOrig(),
+                result -> {
+                    holder.setPhoto(result);
+                    DownloaderImages.getInstance().addToCash(vkUser.getPhotoOrig(), result);
+                    holder.mProgressBar.setVisibility(View.GONE);
+                });
+        }
     }
 
     @Override
-    public int getItemCount() {
+    public int getItemCount()  {
         return mFriendList == null ? 0 : mFriendList.size();
     }
 
@@ -54,20 +66,10 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.VHFriend
         private TextView mFio;
         private ImageView mPhoto;
         private ProgressBar mProgressBar;
-        private ClickFriendCallBack mClickFriendCallBack;
 
-        public VHFriends(@NonNull View itemView, List<VKUser> friendList) {
+        private VHFriends(@NonNull View itemView) {
             super(itemView);
             findViews(itemView);
-
-            Context context = itemView.getContext();
-            if (context instanceof ClickFriendCallBack){
-                mClickFriendCallBack = (ClickFriendCallBack) context;
-            }
-
-            itemView.setOnClickListener((n)->{
-                mClickFriendCallBack.clickOn(friendList.get(getAdapterPosition()));
-            });
         }
 
         private void findViews(View itemView) {
@@ -76,11 +78,13 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.VHFriend
             mProgressBar = itemView.findViewById(R.id.progress);
         }
 
-        public void bind(VKUser vkUser) {
+        private void bind(VKUser vkUser) {
             mFio.setText(new StringBuilder().append(vkUser.getLastName()).append(" ").append(vkUser.getFirstName()));
             mProgressBar.setVisibility(View.VISIBLE);
-            new DownloadImageTask(mPhoto, mProgressBar).execute(vkUser.getPhotoOrig());
         }
 
+        private void setPhoto(Bitmap result) {
+            mPhoto.setImageBitmap(result);
+        }
     }
 }

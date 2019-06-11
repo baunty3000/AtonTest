@@ -1,38 +1,25 @@
 package com.malakhov.atontest.view;
 
 import com.malakhov.atontest.R;
-
-import android.content.Context;
+import com.malakhov.atontest.presenter.LoginPresenter;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-
 import static com.malakhov.atontest.view.WelcomeActivity.TAG_LOGIN;
-
 
 public class LoginFragment extends Fragment {
 
     private static final int LAYOUT = R.layout.fragment_login;
-    private MessageFragmentListener mListener;
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof MessageFragmentListener){
-            mListener = (MessageFragmentListener) context;
-        }
-    }
+    private LoginPresenter mLoginPresenter;
 
     @Override
     public void onDetach() {
-        mListener = null;
         super.onDetach();
+        mLoginPresenter.detachView();
     }
 
     @Nullable
@@ -45,6 +32,10 @@ public class LoginFragment extends Fragment {
     }
 
     private void init(View view) {
-        ((Button)view.findViewById(R.id.login)).setOnClickListener((v)-> mListener.onItemClicked(TAG_LOGIN));
+        mLoginPresenter = new LoginPresenter();
+        mLoginPresenter.attachView(getActivity());
+        view.findViewById(R.id.login).setOnClickListener((v) -> {
+            mLoginPresenter.onLickBtn(TAG_LOGIN);
+        });
     }
 }
