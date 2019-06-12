@@ -27,7 +27,7 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.VHFriend
         mFriendList.clear();
         mFriendList.addAll(list);
         notifyDataSetChanged();
-        DownloaderImages.getInstance().init();
+        DownloaderImages.getInstance().init(list.size());
     }
 
     @NonNull
