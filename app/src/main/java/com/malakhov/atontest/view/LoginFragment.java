@@ -34,8 +34,6 @@ public class LoginFragment extends Fragment {
     private void init(View view) {
         mLoginPresenter = new LoginPresenter();
         mLoginPresenter.attachView(getActivity());
-        view.findViewById(R.id.login).setOnClickListener((v) -> {
-            mLoginPresenter.onLickBtn(TAG_LOGIN);
-        });
+        view.findViewById(R.id.login).setOnClickListener((v) -> mLoginPresenter.onLickBtn(TAG_LOGIN));
     }
 }

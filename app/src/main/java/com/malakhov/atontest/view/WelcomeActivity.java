@@ -15,6 +15,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.test.espresso.idling.CountingIdlingResource;
 
 public class WelcomeActivity extends AppCompatActivity implements MessageFragmentListener, ClickFriendCallBack {
 
@@ -27,6 +28,7 @@ public class WelcomeActivity extends AppCompatActivity implements MessageFragmen
     public static final String TAG_PHOTO = "TAG_PHOTO";
     private FragmentManager mFragmentManager;
     private ActivityPresenter mPresenter;
+    private CountingIdlingResource mCountingIdlingResource;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,8 +45,10 @@ public class WelcomeActivity extends AppCompatActivity implements MessageFragmen
     }
 
     private void init() {
+        mCountingIdlingResource = new CountingIdlingResource(TAG);
         mPresenter = new ActivityPresenter();
         mPresenter.attachView(this);
+        mPresenter.setCountingIdlingResource(mCountingIdlingResource);
         mFragmentManager = getSupportFragmentManager();
     }
 
@@ -81,6 +85,7 @@ public class WelcomeActivity extends AppCompatActivity implements MessageFragmen
             @Override
             public void onResult(VKAccessToken res) {
                 mPresenter.loadFragmentData(TAG_LOGGED_IN, null); // Пользователь успешно авторизовался
+                mCountingIdlingResource.decrement();
             }
             @Override
             public void onError(VKError error) {
@@ -90,5 +95,9 @@ public class WelcomeActivity extends AppCompatActivity implements MessageFragmen
         })) {
             super.onActivityResult(requestCode, resultCode, data);
         }
+    }
+
+    public CountingIdlingResource getCountingIdlingResource() {
+        return mCountingIdlingResource;
     }
 }
