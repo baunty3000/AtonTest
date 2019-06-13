@@ -1,8 +1,8 @@
 package com.malakhov.atontest.view;
 
 import com.malakhov.atontest.R;
-import com.malakhov.atontest.common.DownloaderImages;
 import com.malakhov.atontest.presenter.PhotoPresenter;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,8 +13,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import static com.malakhov.atontest.presenter.PresenterActivity.KEY_FIO;
-import static com.malakhov.atontest.presenter.PresenterActivity.KEY_IMAGE_URL;
+import static com.malakhov.atontest.presenter.ActivityPresenter.KEY_FIO;
+import static com.malakhov.atontest.presenter.ActivityPresenter.KEY_IMAGE_URL;
 
 public class PhotoFragment extends Fragment {
 
@@ -47,7 +47,7 @@ public class PhotoFragment extends Fragment {
         mPhotoPresenter = new PhotoPresenter();
         mPhotoPresenter.attachView(this);
         findViews(view);
-        loadFriend();
+        loadPhotoFriend();
     }
 
     private void findViews (View view){
@@ -56,14 +56,14 @@ public class PhotoFragment extends Fragment {
         mProgressBar = view.findViewById(R.id.progress);
     }
 
-    private void loadFriend(){
-        mPhotoPresenter.loadFriend();
+    private void loadPhotoFriend(){
+        mPhotoPresenter.loadPhotoFriend(mUrl);
     }
 
-    public void showFriend(){
+    public void showFriend(Bitmap bitmap){
         mText.setText(mFirstName);
         mProgressBar.setVisibility(View.VISIBLE);
-        mPhoto.setImageBitmap(DownloaderImages.getInstance().getPhoto(mUrl));
+        mPhoto.setImageBitmap(bitmap);
         mProgressBar.setVisibility(View.GONE);
     }
 }

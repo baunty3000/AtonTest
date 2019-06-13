@@ -3,7 +3,7 @@ package com.malakhov.atontest.view;
 import com.malakhov.atontest.R;
 import com.malakhov.atontest.common.ClickFriendCallBack;
 import com.malakhov.atontest.model.VKUser;
-import com.malakhov.atontest.presenter.PresenterActivity;
+import com.malakhov.atontest.presenter.ActivityPresenter;
 import com.vk.sdk.VKAccessToken;
 import com.vk.sdk.VKCallback;
 import com.vk.sdk.VKSdk;
@@ -26,7 +26,7 @@ public class WelcomeActivity extends AppCompatActivity implements MessageFragmen
     public static final String TAG_LOGGED_IN = "TAG_LOGGED_IN";
     public static final String TAG_PHOTO = "TAG_PHOTO";
     private FragmentManager mFragmentManager;
-    private PresenterActivity mPresenter;
+    private ActivityPresenter mPresenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,7 +43,7 @@ public class WelcomeActivity extends AppCompatActivity implements MessageFragmen
     }
 
     private void init() {
-        mPresenter = new PresenterActivity();
+        mPresenter = new ActivityPresenter();
         mPresenter.attachView(this);
         mFragmentManager = getSupportFragmentManager();
     }

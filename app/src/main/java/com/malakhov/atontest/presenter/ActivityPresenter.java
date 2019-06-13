@@ -14,7 +14,7 @@ import static com.malakhov.atontest.view.WelcomeActivity.TAG_LOGIN;
 import static com.malakhov.atontest.view.WelcomeActivity.TAG_PHOTO;
 import static com.malakhov.atontest.view.WelcomeActivity.TAG_WELCOME;
 
-public class PresenterActivity {
+public class ActivityPresenter {
 
     public static final String KEY_FIO = "KEY_FIO";
     public static final String KEY_IMAGE_URL = "KEY_IMAGE_URL";

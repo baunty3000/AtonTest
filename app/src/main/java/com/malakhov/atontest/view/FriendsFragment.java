@@ -35,10 +35,10 @@ public class FriendsFragment extends Fragment {
     }
 
     @Override
-    public void onDetach() {
-        super.onDetach();
+    public void onDestroy() {
+        super.onDestroy();
         mListener = null;
-        mFriendsPresenter.detachView();
+        if (mFriendsPresenter != null) mFriendsPresenter.detachView();
     }
 
     @Nullable

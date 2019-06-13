@@ -1,5 +1,6 @@
 package com.malakhov.atontest.model;
 
+import com.malakhov.atontest.common.DownloaderImages;
 import com.vk.sdk.api.VKApi;
 import com.vk.sdk.api.VKError;
 import com.vk.sdk.api.VKParameters;
@@ -15,7 +16,6 @@ import static com.vk.sdk.api.VKApiConst.FIELDS;
 public class Model {
 
     private static final Model ourInstance = new Model();
-    private LoadFriendsCallback mLoadFriendsCallback;
 
     public static Model getInstance() {
         return ourInstance;
@@ -24,11 +24,7 @@ public class Model {
     private Model() {
     }
 
-    public void setLoadFriendsCallback(LoadFriendsCallback loadFriendsCallback) {
-        mLoadFriendsCallback = loadFriendsCallback;
-    }
-
-    public void loadFriends() {
+    public void loadFriends(LoadFriendsCallback loadFriendsCallback) {
         VKParameters vkParameters = new VKParameters();
         vkParameters.put(FIELDS, "photo_100, photo_max_orig");
         final VKRequest request = VKApi.friends().get(vkParameters);
@@ -37,7 +33,7 @@ public class Model {
             @Override
             public void onComplete(VKResponse response) {
                 Log.d(TAG, "Model loading friends onComplete");
-                mLoadFriendsCallback.onLoad(getListFriends(getJSONArrayFriends(response)));
+                loadFriendsCallback.onLoad(getListFriends(getJSONArrayFriends(response)));
             }
 
             @Override
@@ -50,6 +46,14 @@ public class Model {
                 Log.d(TAG, "attemptFailed: " + attemptNumber);
             }
         });
+    }
+
+    public void getPhotoFriend(String url, LoadPhotoFriendCallback loadPhotoFriendCallback){
+        if (DownloaderImages.getInstance().getPhoto(url) != null){
+            loadPhotoFriendCallback.onLoad(DownloaderImages.getInstance().getPhoto(url));
+        } else {
+            DownloaderImages.getInstance().downloadPhoto(url, result -> loadPhotoFriendCallback.onLoad(result));
+        }
     }
 
     private JSONArray getJSONArrayFriends(VKResponse response) {
