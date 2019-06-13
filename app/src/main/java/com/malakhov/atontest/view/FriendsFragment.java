@@ -11,6 +11,8 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.TextView;
 import java.util.ArrayList;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -25,6 +27,9 @@ public class FriendsFragment extends Fragment {
     private FriendsAdapter mAdapter;
     private MessageFragmentListener mListener;
     private FriendsPresenter mFriendsPresenter;
+    private RecyclerView mRecycler;
+    private TextView mTvError;
+    private Button mButton;
 
     @Override
     public void onAttach(Context context) {
@@ -52,17 +57,23 @@ public class FriendsFragment extends Fragment {
     }
 
     private void init(View view) {
+        findViews(view);
         mFriendsPresenter = new FriendsPresenter();
         mFriendsPresenter.attachView(this);
         mAdapter = new FriendsAdapter(getActivity() instanceof ClickFriendCallBack ? (ClickFriendCallBack) getActivity() : null);
-        RecyclerView recycler = view.findViewById(R.id.recycler);
-        recycler.setLayoutManager(new LinearLayoutManager(getContext()));
-        recycler.setAdapter(mAdapter);
+        mRecycler = view.findViewById(R.id.recycler);
+        mRecycler.setLayoutManager(new LinearLayoutManager(getContext()));
+        mRecycler.setAdapter(mAdapter);
         loadFriends();
-        view.findViewById(R.id.logout).setOnClickListener((v)-> {
+        mButton.setOnClickListener((v)-> {
             VKSdk.logout();
             mListener.onViewClicked(TAG_WELCOME);
         });
+    }
+
+    private void findViews (View view){
+        mTvError = view.findViewById(R.id.tv_error);
+        mButton = view.findViewById(R.id.logout);
     }
 
     private void loadFriends(){
@@ -71,5 +82,11 @@ public class FriendsFragment extends Fragment {
 
     public void showFriends(ArrayList<VKUser> friendList) {
         mAdapter.setNewsItems(friendList);
+    }
+
+    public void showError() {
+        mButton.setVisibility(View.GONE);
+        mRecycler.setVisibility(View.GONE);
+        mTvError.setVisibility(View.VISIBLE);
     }
 }

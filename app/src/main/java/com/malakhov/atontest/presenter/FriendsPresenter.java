@@ -16,6 +16,6 @@ public class FriendsPresenter{
     }
 
     public void loadFriends() {
-        Model.getInstance().loadFriends(friendList -> mView.showFriends(friendList));
+        Model.getInstance().loadFriends(friendList -> mView.showFriends(friendList), () -> mView.showError());
     }
 }

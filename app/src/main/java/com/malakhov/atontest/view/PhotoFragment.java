@@ -24,6 +24,7 @@ public class PhotoFragment extends Fragment {
     private String mUrl;
     private String mFirstName;
     private ProgressBar mProgressBar;
+    private TextView tvError;
     private PhotoPresenter mPhotoPresenter;
 
     @Override
@@ -54,6 +55,7 @@ public class PhotoFragment extends Fragment {
         mPhoto = view.findViewById(R.id.photo);
         mText = view.findViewById(R.id.tv_photo);
         mProgressBar = view.findViewById(R.id.progress);
+        tvError = view.findViewById(R.id.tv_error);
     }
 
     private void loadPhotoFriend(){
@@ -65,5 +67,10 @@ public class PhotoFragment extends Fragment {
         mProgressBar.setVisibility(View.VISIBLE);
         mPhoto.setImageBitmap(bitmap);
         mProgressBar.setVisibility(View.GONE);
+    }
+
+    public void showError() {
+        mProgressBar.setVisibility(View.GONE);
+        tvError.setVisibility(View.VISIBLE);
     }
 }

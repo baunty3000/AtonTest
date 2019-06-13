@@ -24,7 +24,7 @@ public class Model {
     private Model() {
     }
 
-    public void loadFriends(LoadFriendsCallback loadFriendsCallback) {
+    public void loadFriends(LoadFriendsCallback loadFriendsCallback, ErrorCallback errorCallback) {
         VKParameters vkParameters = new VKParameters();
         vkParameters.put(FIELDS, "photo_100, photo_max_orig");
         final VKRequest request = VKApi.friends().get(vkParameters);
@@ -39,6 +39,7 @@ public class Model {
             @Override
             public void onError(VKError error) {
                 Log.d(TAG, "onError: " + error);
+                errorCallback.onError();
             }
 
             @Override

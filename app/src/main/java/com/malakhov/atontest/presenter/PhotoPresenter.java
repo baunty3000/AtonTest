@@ -1,6 +1,5 @@
 package com.malakhov.atontest.presenter;
 
-import com.malakhov.atontest.model.LoadPhotoFriendCallback;
 import com.malakhov.atontest.model.Model;
 import com.malakhov.atontest.view.PhotoFragment;
 
@@ -17,7 +16,12 @@ public class PhotoPresenter {
     }
 
     public void loadPhotoFriend(String url) {
-        LoadPhotoFriendCallback loadPhotoFriendCallback = bitmap -> mView.showFriend(bitmap);
-        Model.getInstance().getPhotoFriend(url, loadPhotoFriendCallback);
+        Model.getInstance().getPhotoFriend(url, bitmap -> {
+            if (bitmap != null) {
+                mView.showFriend(bitmap);
+            } else {
+                mView.showError();
+            }
+        });
     }
 }
